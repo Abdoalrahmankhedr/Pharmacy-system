@@ -100,6 +100,11 @@ function createNewId(length = 7) {
     let year=new Date().getFullYear();
     return `INV-${year}-${result}`;
 }
+function validatePhoneNumber(phone) {
+    const phoneStr = phone.toString();
+    const phoneRegex = /^01\d{9}$/;
+    return phoneRegex.test(phoneStr);
+}
 window.addEventListener("load",()=>{
     loadInvoicesFromStorage();
     loadProductsFromStorage();
@@ -453,7 +458,12 @@ function showInvoices(){
 }
 createinvoice.addEventListener("click",()=>{
     if(cartItemsArray.length===0) showalert("Cart Is Empty","var(--danger)");
+    else if(CustomerTel.value.length>0&&!validatePhoneNumber(CustomerTel.value)){
+        CustomerTel.style.border="2px red solid";
+        console.log("abdo");
+    }
     else{
+        CustomerTel.style.border="1px black solid";
         let idx;
         let currentinvoicearray=[];
         for(let i=0;i<cartItemsArray.length;i++){
@@ -574,7 +584,7 @@ ExportInvoices.addEventListener("click", () => {
             <td>${invoicearray[i].data}</td>
             <td>${invoicearray[i].time}</td>
             <td>${invoicearray[i].customername}</td>
-            <td>${invoicearray[i].CustomerTel}</td>
+            <td>'${String(invoicearray[i].CustomerTel)}</td>
             <td>${invoicearray[i].items}</td>
             <td>${invoicearray[i].subtotal}</td>
             <td>${invoicearray[i].tax}</td>
