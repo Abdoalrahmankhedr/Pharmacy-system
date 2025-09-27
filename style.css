@@ -622,6 +622,28 @@ font-size: 18px;
     pointer-events: none;
     transition: opacity 0.5s, transform 0.5s;
 }
+#invoice-alert {
+  position: fixed;
+  top: 20px;
+  right: -350px;
+  width: 300px;
+  padding: 15px;
+  background: linear-gradient(135deg, #ff6b6b, #ff4757);
+  color: white;
+  font-size: 14px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: right 0.5s ease-in-out;
+  z-index: 9999;
+}
+#invoice-alert.show {
+  right: 20px;
+}
+#invoice-alert p {
+  margin: 0;
+  font-weight: 500;
+}
+
 .disable{
     display: none;
 }
