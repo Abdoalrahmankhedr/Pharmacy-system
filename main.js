@@ -55,6 +55,7 @@ let invoice_discount=document.querySelector(".invoice_discount");
 let invoice_totalamount=document.querySelector(".invoice_totalamount");
 let popup=document.querySelector(".invoice-popup");
 let invoice_time=document.querySelector(".invoice_time");
+let invoice_alert=document.getElementById("invoice-alert");
 //###########################Variables###########################
 let productarray=[];
 let invoicearray=[];
@@ -124,13 +125,23 @@ function updatePriceInInvoice(subtotal){
     taxinput.addEventListener("input", ()=>updatePriceInInvoice(subtotal));
     discountinput.addEventListener("input", ()=>updatePriceInInvoice(subtotal));
 }
-function showalert(txt,color){
-    alert.innerHTML=`<p>${txt}</p>`;
+function showalert(txt1,color){
+    if(txt1) alert.innerHTML=`<p>${txt1}</p>`;
     alert.style.backgroundColor=color;
-   alert.classList.add("show");
+    alert.classList.add("show");
     setTimeout(() => {
         alert.classList.remove("show"); 
     }, 1000);
+}
+function showinvlicealert(txt1,time,txt2){
+    if(txt1) invoice_alert.innerHTML=`<p>${txt1}</p>`;
+    if(txt2){
+        invoice_alert.innerHTML += `<p>${txt2}</p>`;
+    }
+    invoice_alert.classList.add("show");
+    setTimeout(() => {
+       invoice_alert.classList.remove("show"); 
+    }, 4000);
 }
 function showselectionbox(){
     selectionbox.innerHTML='<option value="-1">-- Select Products --</option>';
@@ -190,7 +201,6 @@ function resetInputs(){
         ele.value="";
     })
 }
-
 addproductbtn.addEventListener("click", () => {
     if(nametxt.value.length > 0 &&price.value.length > 0 &&quantity.value.length > 0 &&Manufacturer.value.length > 0 &&data.value.length > 0&&price.value>0&&quantity.value>=0){
     let inputDate = new Date(data.value); 
@@ -207,8 +217,26 @@ addproductbtn.addEventListener("click", () => {
          expired:inputDate < today,
         };
         addproductbtn.innerText='Add Product';
+        let index=searchInCartArray(productarray[Updateidx].productname);
+        if(index>=0){
+          let txt1=null,txt2=null;
+          if(cartItemsArray[index].productprice!=productarray[Updateidx].productprice){
+              txt1=`Product price updated: ${productarray[Updateidx].productname} from ${cartItemsArray[index].productprice} to ${productarray[Updateidx].productprice}`;
+              cartItemsArray[index].productprice=productarray[Updateidx].productprice;
+          } 
+          if(parseInt(cartItemsArray[index].productquantity)>parseInt(productarray[Updateidx].productquantity)){
+              txt2=`Requested quantity for [${productarray[Updateidx].productname}] exceeds stock. Adjusted to ${productarray[Updateidx].productquantity} `;
+              cartItemsArray[index].productquantity=productarray[Updateidx].productquantity;
+          }
+          if(txt1||txt2) {
+            showinvlicealert(txt1,4000,txt2);
+            if(cartItemsArray[index].productquantity==="0") cartItemsArray.splice(index,1);
+            showCartItems();
+          }
+        }
        }
        else{
+        console.log("wq");
         productarray.push({
          productname:nametxt.value,
          productdata:data.value,
