@@ -111,6 +111,10 @@ window.addEventListener("load",()=>{
     loadProductsFromStorage();
     showProducts();
     showInvoices();
+    let newdiv=document.createElement("div");
+    newdiv.setAttribute("id","invoice-alert");
+    document.body.appendChild(newdiv);
+
 });
 function updatePriceInInvoice(subtotal){
     let tax = parseFloat(taxinput?.value) || 10;
