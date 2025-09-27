@@ -236,7 +236,6 @@ addproductbtn.addEventListener("click", () => {
         }
        }
        else{
-        console.log("wq");
         productarray.push({
          productname:nametxt.value,
          productdata:data.value,
