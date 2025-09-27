@@ -136,6 +136,10 @@ function showselectionbox(){
         selectionbox.appendChild(newOption);        
     }
 }
+function searchInCartArray(name){
+    let idx=cartItemsArray.findIndex(ele =>ele.productname===name);
+    return idx;
+}
 function appendThisProductToTable(i){
     let newTr=document.createElement("tr");
        newTr.innerHTML=`
@@ -154,7 +158,6 @@ function appendThisProductToTable(i){
     `;
     if(productarray[i].expired){
           newTr.classList.add("expired");
-          console.log(i)
     }
     Producttable.appendChild(newTr);
 }
@@ -184,10 +187,12 @@ function resetInputs(){
 }
 
 addproductbtn.addEventListener("click", () => {
-    if(nametxt.value.length > 0 &&price.value.length > 0 &&quantity.value.length > 0 &&Manufacturer.value.length > 0 &&data.value.length > 0&&price.value>0){
+    if(nametxt.value.length > 0 &&price.value.length > 0 &&quantity.value.length > 0 &&Manufacturer.value.length > 0 &&data.value.length > 0&&price.value>0&&quantity.value>=0){
     let inputDate = new Date(data.value); 
     let today = new Date();
+    let IsItNew=true;
        if(addproductbtn.innerText==='Update'){
+         IsItNew=false;
          productarray[Updateidx]={
          productname:nametxt.value,
          productdata:data.value,
@@ -211,6 +216,9 @@ addproductbtn.addEventListener("click", () => {
        showProducts();
        uploadProductsToStorage();
        resetInputs();
+       if(IsItNew) showalert("Product Add successfully","lightgreen");
+       else showalert("Product Updated successfully","lightgreen");
+
     } 
     else {
         inputs.forEach(ele => {
@@ -218,6 +226,7 @@ addproductbtn.addEventListener("click", () => {
            ele.style.border = "2px solid red";
          }
          if(ele.id==="pricetxt"&&ele.value<=0) ele.style.border = "2px solid red";
+         if(ele.id==="quantitytxt"&&ele.value<0) ele.style.border = "2px solid red";
         });
     }
 });
@@ -259,14 +268,22 @@ function showCartItems(){
 function addproducttocart(idx,qty=1){
     if(productarray[idx].expired) showalert("This is Expired!","var(--danger)");
     else{
+        let index=searchInCartArray(productarray[idx].productname);
         if(productarray[idx].productquantity<=0){
            showalert("Out Of Stock","var(--danger)");
+        }
+        else if(index>=0){
+           if(cartItemsArray[index].productquantity+1>productarray[idx].productquantity) showalert("There is not Enough Quantity","var(--danger)");
+           else{
+              cartItemsArray[index].productquantity++;
+              showCartItems();
+           }
         }
         else{
            cartItemsArray.push({
            productname:productarray[idx].productname,
            productprice:productarray[idx].productprice,
-           productquantity:1,
+           productquantity:qty,
         })
         showCartItems();
        }
@@ -356,10 +373,21 @@ addtoinvoices.addEventListener("click", () => {
     } 
     else if(productarray[selectedValue].expired) showalert("This is Expired"); 
     else {
+        let index=searchInCartArray(productarray[selectedValue].productname);
         if (parseInt(productarray[selectedValue].productquantity) < qtyValue) {
-            console.log(productarray[selectedValue].productquantity);
             showalert("There is no enough Quantity in Stock", "var(--danger)");
-        } else {
+        }
+        else if(index>=0){
+            if(cartItemsArray[index].productquantity+qtyValue>productarray[selectedValue].productquantity) showalert("There is Not Enought Quantity");
+            else{
+                cartItemsArray[index].productquantity+=qtyValue;
+                showCartItems();
+                addQtytoinvoices.value = "";
+                selectionbox.style.border = `1px solid black`;
+                addQtytoinvoices.style.border = `1px solid black`;
+            }
+        }
+        else {
             addproducttocart(selectedValue, qtyValue);
             addQtytoinvoices.value = "";
             selectionbox.style.border = `1px solid black`;
