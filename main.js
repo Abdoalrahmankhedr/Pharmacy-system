@@ -545,8 +545,8 @@ ExportInvoices.addEventListener("click", () => {
             <td>${invoicearray[i].id}</td>
             <td>${invoicearray[i].data}</td>
             <td>${invoicearray[i].time}</td>
-            <td>${CustomerName.value ? CustomerName.value : "Unknown"}</td>
-            <td>${CustomerTel.value ? CustomerTel.value : "Unknown"}</td>
+            <td>${invoicearray[i].customername}</td>
+            <td>${invoicearray[i].CustomerTel}</td>
             <td>${invoicearray[i].items}</td>
             <td>${invoicearray[i].subtotal}</td>
             <td>${invoicearray[i].tax}</td>
