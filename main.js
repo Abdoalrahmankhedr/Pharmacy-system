@@ -56,6 +56,7 @@ let invoice_totalamount=document.querySelector(".invoice_totalamount");
 let popup=document.querySelector(".invoice-popup");
 let invoice_time=document.querySelector(".invoice_time");
 let invoice_alert=document.getElementById("invoice-alert");
+let saveinputs=document.getElementsByClassName("saveinputs");
 //###########################Variables###########################
 let productarray=[];
 let invoicearray=[];
@@ -76,7 +77,26 @@ function loadProductsFromStorage(){
 function loadInvoicesFromStorage(){
     invoicearray=JSON.parse(localStorage.getItem("Invoices"))||[];
 }
+function saveToSession(e) {
+  const element = e.target;
+  const key = element.name;
+  const value = element.value;
+  sessionStorage.setItem(key, value);
+}
+function loadSessionDate(){
+    for(let el of saveinputs){
+      const key = el.name;
+      const savedValue = sessionStorage.getItem(key);
+      if (savedValue !== null) {
+        el.value = savedValue;
+      }  
+    }
+}
 //###########################Functions###########################
+for (let el of saveinputs) {
+  el.addEventListener('input', saveToSession);
+  el.addEventListener('change', saveToSession);
+}
 function getCurrentDateTime() {
     let now = new Date();
     let day = now.getDate();
@@ -114,7 +134,7 @@ window.addEventListener("load",()=>{
     let newdiv=document.createElement("div");
     newdiv.setAttribute("id","invoice-alert");
     document.body.appendChild(newdiv);
-
+    loadSessionDate();
 });
 function updatePriceInInvoice(subtotal){
     let tax = parseFloat(taxinput?.value) || 10;
