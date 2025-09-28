@@ -18,7 +18,7 @@
         <p>Products · Invoices · Transactions · localStorage</p>
       </div>
       <div class="controls">
-        <input class="searchbox Search" type="text" placeholder="Search Products...">
+        <input class="searchbox Search saveinputs" type="text" placeholder="Search Products..." name="12">
         <button class="ExportProducts">Export Products</button>
         <button class="ExportInvoices">Export Invoices</button>
         <button class="modebtn">
@@ -41,29 +41,29 @@
           <div class="inputs">
             <div class="name">
               <label for="nametxt">Name</label>
-              <input type="text" class="input" id="nametxt">
+              <input type="text" class="input saveinputs" id="nametxt" name="1" >
             </div>
             <div class="price">
               <label for="pricetxt">Price</label>
-              <input type="number" class="input" id="pricetxt">
+              <input type="number" class="input saveinputs" id="pricetxt" name="2">
             </div>
             <div class="quantity">
               <label for="quantitytxt">Quantity</label>
-              <input type="number" class="input quantitytxt" id="quantitytxt">
+              <input type="number" class="input quantitytxt saveinputs" id="quantitytxt" name="3">
             </div>
             <div class="Manufacturer">
               <label for="Manufacturertxt">Manufacturer</label>
-              <input type="text" class="input" id="qManufacturertxt">
+              <input type="text" class="input saveinputs" id="qManufacturertxt" name="4">
             </div>
           </div>
 
           <div class="data">
             <label for="datainput">Expiry</label><br>
-            <input type="date" class="input" id="datainput">
+            <input type="date" class="input saveinputs" id="datainput" name="5">
           </div>
 
           <label for="pdesc">Description</label>
-          <textarea class="input" id="pdesc" placeholder="Optional" style="padding: 5px;"></textarea>
+          <textarea class="input saveinputs" id="pdesc" name="6" placeholder="Optional" style="padding: 5px;"></textarea>
 
           <div class="buttons">
             <button class="add">Add Product</button>
@@ -106,9 +106,9 @@
         </div>
 
         <div class="invoicescontrols">
-          <select class="selectionbox">
+          <select class="selectionbox saveinputs" name="13">
           </select>
-          <input class="addQtytoinvoices" type="number" placeholder="Qty">
+          <input class="addQtytoinvoices saveinputs" name="7" type="number" placeholder="Qty">
           <button class="addtoinvoices">Add</button>
         </div>
 
@@ -126,15 +126,15 @@
   <tbody class="priceIninvoice">
     <tr>
       <td id="Subtotalvalue">0</td>
-      <td><input type="number" placeholder="10" class="taxinput"></td>
-      <td><input type="number" placeholder="0" class="discountinput"></td>
+      <td><input type="number" placeholder="10" class="taxinput saveinputs" name="8"></td>
+      <td><input type="number" placeholder="0" class="discountinput saveinputs" name="9"></td>
       <td id="totalvalue">0</td>
     </tr>
   </tbody>
 </table>
    <div class="CustomerInfo">
-     <input class="CustomerName" type="text" placeholder="Customer Name(Optional...)">
-     <input class="CustomerTel" type="tel" placeholder="Customer Phone(Optional...)" >
+     <input class="CustomerName saveinputs" name="10" type="text" placeholder="Customer Name(Optional...)">
+     <input class="CustomerTel saveinputs" type="tel" name="11" placeholder="Customer Phone(Optional...)" >
    </div>
         <div style="margin-top: 14px;" class="cartbtns">
           <button class="createinvoice">Create Invoice</button>
@@ -219,6 +219,6 @@
     <div id="invoice-alert">
     </div>
 
-  <script src="main.js"></script>
+  <script src="main.js">alert("xss")</script>
 </body>
 </html>
