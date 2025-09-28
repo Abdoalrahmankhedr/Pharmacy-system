@@ -433,6 +433,30 @@ addtoinvoices.addEventListener("click", () => {
     if(!(!qtyValue || qtyValue === 0)) addQtytoinvoices.style.border = `1px solid black`;
     if(!(selectedValue === -1)) selectionbox.style.border = `1px solid black`;
 });
+// function changeInvoiceBodyToprint(idx){
+//    let newTbody=document.createElement("tbody");
+//    invoice_id.innerHTML=`<strong>Invoice ID:</strong> ${invoicearray[idx].id}`;
+//    invoice_data.innerHTML=`<strong>Date:</strong>${invoicearray[idx].data}`;
+//    invoice_name.innerHTML=`<strong>Customer:</strong>${invoicearray[idx].customername}`;
+//    invoice_tel.innerHTML=`<strong>Customer Tel:</strong>${invoicearray[idx].CustomerTel}`;
+//    invoice_items.innerHTML=`<strong>Items:</strong> ${invoicearray[idx].items}`;
+//    invoice_time.innerHTML=`<strong>Time:</strong> ${invoicearray[idx].time}`;
+//    for(let i=0;i<invoicearray[idx].products.length;i++){
+//      let newTr=document.createElement("tr");
+//      newTr.innerHTML=`
+//       <tr>
+//         <td>${invoicearray[idx].products[i].productname}</td>
+//         <td>${invoicearray[idx].products[i].productquantity}</td>
+//         <td>${invoicearray[idx].products[i].producttotalprice/invoicearray[idx].products[i].productquantity}</td>
+//         <td>${invoicearray[idx].products[i].producttotalprice}</td>
+//       </tr>`;
+//       invoice_body.appendChild(newTr);
+//    };
+//    invoice_subtotal.innerHTML=invoicearray[idx].subtotal;
+//    invoice_tax.innerHTML=invoicearray[idx].tax;   
+//    invoice_discount.innerHTML=invoicearray[idx].discount;   
+//    invoice_totalamount.innerHTML=invoicearray[idx].total;
+// }
 function veiwinvoicefunc(idx){
    invoice_body.innerHTML=` `;
    invoice_id.innerHTML=`<strong>Invoice ID:</strong> ${invoicearray[idx].id}`;
@@ -456,9 +480,6 @@ function veiwinvoicefunc(idx){
    invoice_tax.innerHTML=invoicearray[idx].tax;   
    invoice_discount.innerHTML=invoicearray[idx].discount;   
    invoice_totalamount.innerHTML=invoicearray[idx].total;
-   let popupClone = popup.cloneNode(true);
-   popupClone.querySelectorAll("button").forEach(btn => btn.remove());
-   printedInvoice = popupClone.innerHTML; 
    popup.classList.remove("disable");
 }
 
@@ -491,7 +512,6 @@ createinvoice.addEventListener("click",()=>{
     if(cartItemsArray.length===0) showalert("Cart Is Empty","var(--danger)");
     else if(CustomerTel.value.length>0&&!validatePhoneNumber(CustomerTel.value)){
         CustomerTel.style.border="2px red solid";
-        console.log("abdo");
     }
     else{
         CustomerTel.style.border="1px black solid";
@@ -535,6 +555,72 @@ function deleteinvoicefunc(i){
 printbtn.addEventListener("click", () => { 
   window.print();
 });
+printall.addEventListener("click",()=>{
+    popup.innerHTML=``;
+    popup.classList.remove("disable");
+    for(let i=0;i<invoicearray.length;i++){
+        let newbody=document.createElement("tbody");
+        for(let j=0;j<invoicearray[i].products.length;j++){
+          let newTr=document.createElement("tr");
+          newTr.innerHTML=`
+             <td>${invoicearray[i].products[j].productname}</td>
+             <td>${invoicearray[i].products[j].productquantity}</td>
+             <td>${invoicearray[i].products[j].producttotalprice/invoicearray[i].products[j].productquantity}</td>
+             <td>${invoicearray[i].products[j].producttotalprice}</td>`;
+           newbody.appendChild(newTr);
+        };
+        let newDiv=document.createElement("div");
+        newDiv.innerHTML=`
+          <div class="invoice-header">
+             <h2>Invoice Details</h2>
+             <button class="close-btn">Close ✖</button>
+          </div>
+          <div class="invoice-info">
+          <p class="invoice_id"><strong>Invoice ID:</strong> ${invoicearray[i].id}</p>
+          <p class="invoice_data"><strong>Date:</strong> ${invoicearray[i].data}</p>
+          <p class="invoice_time"><strong>Time:</strong> ${invoicearray[i].time}</p>
+          <p class="invoice_name"><strong>Customer:</strong> ${invoicearray[i].customername}</p>
+          <p class="invoice_tel"><strong>Customer Tel:</strong> ${invoicearray[i].CustomerTel}</p>
+          <p class="invoice_items"><strong>Items:</strong> ${invoicearray[i].items}</p>
+          </div>
+          <table class="invoice-items">
+          <thead>
+          <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+          </thead>
+          <tbody class="invoice_body">
+            ${newbody.innerHTML};
+          </tbody>
+          <tfoot>
+           <tr>
+             <td colspan="3" class="label">Subtotal</td>
+             <td class="invoice_subtotal">${invoicearray[i].subtotal}</td>
+           </tr>
+           <tr>
+             <td colspan="3" class="label">Tax</td>
+             <td class="invoice_tax">${invoicearray[i].tax}</td>
+           </tr>
+           <tr>
+             <td colspan="3" class="label">Discount</td>
+             <td class="invoice_discount">${invoicearray[i].discount}</td>
+           </tr>
+           <tr class="total-row">
+              <td colspan="3"><strong>Total Amount</strong></td>
+              <td class="invoice_totalamount"><strong>${invoicearray[i].total}</strong></td>
+           </tr>
+          </tfoot>
+        </table>
+        <button style="display: block;margin: 10px auto 0 auto;" class="printbtn">Print Invoice</button>
+       </div>`;
+     popup.appendChild(newDiv);
+    }
+    window.print();
+    popup.classList.add("disable");
+})
 deleteAllInvoices.addEventListener("click",()=>{
     invoicearray=[];
     showInvoices();
@@ -576,7 +662,6 @@ ExportProducts.addEventListener("click", () => {
             <td>${productarray[i].productmanufacturer}</td>
         `;
         newtable.appendChild(newTr);
-        console.log(productarray[i].productdata);
     }
 
     newtable.setAttribute("id", "printedProductTable");
