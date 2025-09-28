@@ -433,30 +433,6 @@ addtoinvoices.addEventListener("click", () => {
     if(!(!qtyValue || qtyValue === 0)) addQtytoinvoices.style.border = `1px solid black`;
     if(!(selectedValue === -1)) selectionbox.style.border = `1px solid black`;
 });
-// function changeInvoiceBodyToprint(idx){
-//    let newTbody=document.createElement("tbody");
-//    invoice_id.innerHTML=`<strong>Invoice ID:</strong> ${invoicearray[idx].id}`;
-//    invoice_data.innerHTML=`<strong>Date:</strong>${invoicearray[idx].data}`;
-//    invoice_name.innerHTML=`<strong>Customer:</strong>${invoicearray[idx].customername}`;
-//    invoice_tel.innerHTML=`<strong>Customer Tel:</strong>${invoicearray[idx].CustomerTel}`;
-//    invoice_items.innerHTML=`<strong>Items:</strong> ${invoicearray[idx].items}`;
-//    invoice_time.innerHTML=`<strong>Time:</strong> ${invoicearray[idx].time}`;
-//    for(let i=0;i<invoicearray[idx].products.length;i++){
-//      let newTr=document.createElement("tr");
-//      newTr.innerHTML=`
-//       <tr>
-//         <td>${invoicearray[idx].products[i].productname}</td>
-//         <td>${invoicearray[idx].products[i].productquantity}</td>
-//         <td>${invoicearray[idx].products[i].producttotalprice/invoicearray[idx].products[i].productquantity}</td>
-//         <td>${invoicearray[idx].products[i].producttotalprice}</td>
-//       </tr>`;
-//       invoice_body.appendChild(newTr);
-//    };
-//    invoice_subtotal.innerHTML=invoicearray[idx].subtotal;
-//    invoice_tax.innerHTML=invoicearray[idx].tax;   
-//    invoice_discount.innerHTML=invoicearray[idx].discount;   
-//    invoice_totalamount.innerHTML=invoicearray[idx].total;
-// }
 function veiwinvoicefunc(idx){
    invoice_body.innerHTML=` `;
    invoice_id.innerHTML=`<strong>Invoice ID:</strong> ${invoicearray[idx].id}`;
@@ -553,11 +529,13 @@ function deleteinvoicefunc(i){
     uploadInvoicesToStorage();
 }
 printbtn.addEventListener("click", () => { 
+  popup.classList.add("printactive");
   window.print();
+  popup.classList.remove("printactive");
 });
 printall.addEventListener("click",()=>{
-    popup.innerHTML=``;
-    popup.classList.remove("disable");
+    let allInvoices=document.createElement("div");
+    allInvoices.innerHTML=``;
     for(let i=0;i<invoicearray.length;i++){
         let newbody=document.createElement("tbody");
         for(let j=0;j<invoicearray[i].products.length;j++){
@@ -616,10 +594,13 @@ printall.addEventListener("click",()=>{
         </table>
         <button style="display: block;margin: 10px auto 0 auto;" class="printbtn">Print Invoice</button>
        </div>`;
-     popup.appendChild(newDiv);
+     allInvoices.appendChild(newDiv);
     }
+    document.body.appendChild(allInvoices);
+    allInvoices.classList.add("printactive");
     window.print();
-    popup.classList.add("disable");
+    allInvoices.classList.add("printactive");
+    allInvoices.classList.add("disable");
 })
 deleteAllInvoices.addEventListener("click",()=>{
     invoicearray=[];
@@ -719,7 +700,6 @@ ExportInvoices.addEventListener("click", () => {
 
     document.getElementById("printedInvoicesTable").remove();
 });
-
 
 
 
