@@ -676,24 +676,24 @@ font-size: 18px;
   body * {
     visibility: hidden;
   }
-  .invoice-popup, .invoice-popup * {
+  .printactive, .printactive * {
     visibility: visible;
   }
-  .invoice-popup {
+  .printactive{
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
   }
-  .invoice-popup button {
+  .printactive button {
     display: none !important;
   }
-  .invoice-popup table {
+  .printactive table {
     width: 100%;
     border-collapse: collapse;
   }
-  .invoice-popup table td, 
-  .invoice-popup table th {
+  .printactive table td, 
+  .printactive table th {
     border: 1px solid black;
     padding: 5px;
   }
