@@ -100,6 +100,7 @@ function loadSessionDate(){
     }
 }
 //###########################Functions###########################
+console.log("ad");
 for (let el of saveinputs) {
   el.addEventListener('input', saveToSession);
   el.addEventListener('change', saveToSession);
@@ -1449,6 +1450,7 @@ ExportInvoices.addEventListener("click", () => {
 
     document.getElementById("printedInvoicesTable").remove();
 });
+
 
 
 
