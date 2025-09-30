@@ -61,6 +61,7 @@ let saveinputs=document.getElementsByClassName("saveinputs");
 let productarray=[];
 let invoicearray=[];
 let cartItemsArray=[];
+let updatebtnmode="0";
 let printedInvoice;
 let Updateidx=0;
 let subtotal=0;
@@ -77,26 +78,7 @@ function loadProductsFromStorage(){
 function loadInvoicesFromStorage(){
     invoicearray=JSON.parse(localStorage.getItem("Invoices"))||[];
 }
-function saveToSession(e) {
-  const element = e.target;
-  const key = element.name;
-  const value = element.value;
-  sessionStorage.setItem(key, value);
-}
-function loadSessionDate(){
-    for(let el of saveinputs){
-      const key = el.name;
-      const savedValue = sessionStorage.getItem(key);
-      if (savedValue !== null) {
-        el.value = savedValue;
-      }  
-    }
-}
 //###########################Functions###########################
-for (let el of saveinputs) {
-  el.addEventListener('input', saveToSession);
-  el.addEventListener('change', saveToSession);
-}
 function getCurrentDateTime() {
     let now = new Date();
     let day = now.getDate();
@@ -134,7 +116,9 @@ window.addEventListener("load",()=>{
     let newdiv=document.createElement("div");
     newdiv.setAttribute("id","invoice-alert");
     document.body.appendChild(newdiv);
-    loadSessionDate();
+
+    if(updatebtnmode==="1") addproductbtn.innerText='Update';
+    showCartItems();
 });
 function updatePriceInInvoice(subtotal){
     let tax = parseFloat(taxinput?.value) || 10;
@@ -241,6 +225,7 @@ addproductbtn.addEventListener("click", () => {
          expired:inputDate < today,
         };
         addproductbtn.innerText='Add Product';
+        updatebtnmode="0";
         let index=searchInCartArray(productarray[Updateidx].productname);
         if(index>=0){
           let txt1=null,txt2=null;
@@ -274,7 +259,6 @@ addproductbtn.addEventListener("click", () => {
        resetInputs();
        if(IsItNew) showalert("Product Add successfully","lightgreen");
        else showalert("Product Updated successfully","lightgreen");
-
     } 
     else {
         inputs.forEach(ele => {
@@ -349,6 +333,7 @@ close_btn.addEventListener("click",()=>{
     popup.classList.add("disable");
 })
 function editproduct(idx){
+    updatebtnmode="1";
     Updateidx=idx;
     nametxt.value = productarray[idx].productname;
     data.value = productarray[idx].productdata;
